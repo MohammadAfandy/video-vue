@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar v-if="showNavbar" />
     <v-content>
       <router-view />
     </v-content>
@@ -9,14 +9,17 @@
 
 <script>
 import Navbar from '@/views/Navbar.vue'
+import FrontNav from '@/_frontNav.js'
 
 export default {
   name: 'App',
   components: {
     Navbar
   },
-  data: () => ({
-    //
-  }),
+  computed: {
+    showNavbar() {
+      return !FrontNav.includes(this.$route.name)
+    }
+  },
 };
 </script>

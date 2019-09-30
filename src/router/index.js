@@ -10,6 +10,11 @@ const routes = [
     component: () => import('@/views/Home.vue')
   },
   {
+    path: "/login",
+    name: "login",
+    component: () => import('@/views/auth/Login.vue')
+  },
+  {
     path: "/video",
     name: "video",
     component: () => import('@/views/video/Video.vue')
@@ -19,6 +24,11 @@ const routes = [
     name: "video-detail",
     params: true,
     component: () => import('@/views/video/VideoDetail.vue')
+  },
+  {
+    path: "*",
+    name: "404", 
+    component: () => import('@/views/error/404.vue')
   }
 ]
 
