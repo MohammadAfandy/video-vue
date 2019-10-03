@@ -79,19 +79,12 @@ export default {
       if (response.status == 200) {
         setTimeout(() => {
           this.$router.push('/') 
+          this.$store.dispatch('setSnackbar', { text: "Login Success"})
           this.$store.dispatch('setLoading', false)
         }, 1000)
       } else {
-        alert(response.data.message)
+        this.$store.dispatch('setSnackbar', { text: response.data.message })
         this.$store.dispatch('setLoading', false)
-      }
-    },
-    async fetchUserInfo() {
-      let response = await this.$store.dispatch('fetchUserInfo')
-      if (response.status == 200) {
-        window.location.href = '/'
-      } else {
-        alert(response.data.message)
       }
     },
     isLoggedIn() {
