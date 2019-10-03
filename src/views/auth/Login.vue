@@ -1,5 +1,11 @@
 <template>
-  <v-container>
+  <div>
+     <v-progress-linear
+        :active="loading"
+        indeterminate
+        color="indigo lighten-2"
+        class="ma-0"
+      ></v-progress-linear>
     <v-row
       align="center"
       justify="center"
@@ -46,11 +52,19 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    loading() {
+      return this.$store.getters.getLoading
+    }
+  },
+  created() {
+    this.isLoggedIn()
+  },
   data: () => ({
     showPassword: false,
     formData: {
@@ -60,11 +74,29 @@ export default {
   }),
   methods: {
     async login() {
+      this.$store.dispatch('setLoading', true)
       let response = await this.$store.dispatch('login', this.formData)
       if (response.status == 200) {
-        this.$router.push('/')
+        setTimeout(() => {
+          this.$router.push('/') 
+          this.$store.dispatch('setLoading', false)
+        }, 1000)
       } else {
         alert(response.data.message)
+        this.$store.dispatch('setLoading', false)
+      }
+    },
+    async fetchUserInfo() {
+      let response = await this.$store.dispatch('fetchUserInfo')
+      if (response.status == 200) {
+        window.location.href = '/'
+      } else {
+        alert(response.data.message)
+      }
+    },
+    isLoggedIn() {
+      if (this.$store.getters.getToken != null) {
+        this.$router.push('/')
       }
     }
   }

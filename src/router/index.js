@@ -6,29 +6,49 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: () => import('@/views/Home.vue')
+    redirect: "/home",
+    name: "container",
+    component: () => import('@/components/Container'),
+    meta: {
+      indexing: true
+    },
+    children: [
+      {
+        path: "home",
+        name: "home",
+        component: () => import('@/views/Home'),
+        meta: {
+          indexing: true
+        },
+      },
+      {
+        path: "video",
+        name: "video",
+        component: () => import('@/views/video/Video'),
+        meta: {
+          indexing: true
+        },
+      },
+      {
+        path: "video/:id",
+        name: "video-detail",
+        params: true,
+        component: () => import('@/views/video/VideoDetail'),
+        meta: {
+          indexing: true
+        },
+      },
+    ]
   },
   {
     path: "/login",
     name: "login",
-    component: () => import('@/views/auth/Login.vue')
-  },
-  {
-    path: "/video",
-    name: "video",
-    component: () => import('@/views/video/Video.vue')
-  },
-  {
-    path: "/video/:id",
-    name: "video-detail",
-    params: true,
-    component: () => import('@/views/video/VideoDetail.vue')
+    component: () => import('@/views/auth/Login')
   },
   {
     path: "*",
     name: "404", 
-    component: () => import('@/views/error/404.vue')
+    component: () => import('@/views/error/404')
   }
 ]
 
