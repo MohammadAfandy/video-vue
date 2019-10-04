@@ -75,17 +75,7 @@ export default {
   methods: {
     async login() {
       this.$store.dispatch('setLoading', true)
-      let response = await this.$store.dispatch('login', this.formData)
-      if (response.status == 200) {
-        setTimeout(() => {
-          this.$router.push('/') 
-          this.$store.dispatch('setSnackbar', { text: "Login Success"})
-          this.$store.dispatch('setLoading', false)
-        }, 1000)
-      } else {
-        this.$store.dispatch('setSnackbar', { text: response.data.message })
-        this.$store.dispatch('setLoading', false)
-      }
+      await this.$store.dispatch('login', this.formData)
     },
     isLoggedIn() {
       if (this.$store.getters.getToken != null) {

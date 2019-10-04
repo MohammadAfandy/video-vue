@@ -76,16 +76,9 @@ export default {
     logout() {
       this.$store.dispatch("setLoading", true);
       setTimeout(() => {
-        this.$store.dispatch("logout");
-        this.$router.push("/login");
+        this.$store.dispatch('logout')
         this.$store.dispatch("setLoading", false);
       }, 1000);
-    },
-    showSnackbar() {
-      this.$store.dispatch('setSnackbar', {
-        text: "TES",
-        show: true
-      })
     }
   },
   watch: {

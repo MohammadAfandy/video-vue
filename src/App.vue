@@ -1,11 +1,19 @@
 <template>
   <v-app>
     <v-snackbar
+      v-for="(snackbar, index) in snackbars.filter(s => s.show )"
+      :key="snackbar.text + Math.random()"
       v-model="snackbar.show"
       :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      :style="`bottom: ${index * 60 + 8}px`"
     >
       {{ snackbar.text }}
+      <v-btn text @click="snackbar.show = false">
+        Close
+      </v-btn>
     </v-snackbar>
+
     <router-view />
   </v-app>
 </template>
@@ -14,8 +22,8 @@
 export default {
   name: "App",
   computed: {
-    snackbar() {
-      return this.$store.getters.getSnackbar
+    snackbars() {
+      return this.$store.getters.getSnackbars
     }
   }
 };

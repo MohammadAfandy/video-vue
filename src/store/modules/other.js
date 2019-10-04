@@ -1,15 +1,17 @@
 export const state = {
   loading: false,
-  snackbar: {
-    text: "",
-    show: false,
-    timeout: 3000
-  }
+  // snackbar: {
+  //   text: "",
+  //   show: false,
+  //   timeout: 3000,
+  //   color: "success"
+  // }
+  snackbars: []
 }
 
 export const getters = {
   getLoading: state => state.loading,
-  getSnackbar: state => state.snackbar,
+  getSnackbars: state => state.snackbars,
 }
 
 export const actions = {
@@ -27,6 +29,8 @@ export const mutations = {
   },
   SET_SNACKBAR(state, data) {
     data.show = true
-    state.snackbar = data
+    data.color = data.color || "success"
+    data.timeout = data.timeout || 3000
+    state.snackbars = state.snackbars.concat(data)
   }
 }

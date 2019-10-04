@@ -4,7 +4,7 @@
     <div class="d-flex flex-wrap">
       <v-col
         md="4" cols="12"
-        v-for="video in getVideos"
+        v-for="video in videos"
         :key="video.id"
       >
         <v-card
@@ -45,14 +45,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   mounted() {
     this.$store.dispatch('fetchVideos')
   },
   computed: {
-    ...mapGetters(['getVideos'])
+    videos() {
+      return this.$store.getters.getVideos
+    }
   },
   filters: {
     abbreviate(text) {

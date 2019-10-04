@@ -1,4 +1,5 @@
 import Api from '@/services/api'
+import router from '@/router'
 
 const baseUrl = '/auth'
 
@@ -15,34 +16,34 @@ export const getters = {
 }
 
 export const actions = {
-  async login({ commit }, payload) {
+  async login({ commit, dispatch }, payload) {
     try {
       let response = await Api().post(`${baseUrl}/login`, payload)
       commit('SET_TOKEN', response.data.data.token)
-      return response
+      setTimeout(() => { 
+        dispatch('setSnackbar', { text: "Login Success" })
+        dispatch('setLoading', false)
+        router.push('/')
+      })
     } catch(e) {
-      localStorage.clear()
       commit('DELETE_USER_INFO')
-      commit('DELETE_TOKEN')
-      return e.response
+      dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      dispatch('setLoading', false)
     }
   },
-  async fetchUserInfo({ commit }) {
+  async fetchUserInfo({ commit, dispatch }) {
     try {
       let response = await Api().get(`${baseUrl}/info`)
       commit('SET_USER_INFO', response.data.data.info)
-      return response
     } catch(e) {
-      localStorage.clear()
-      commit('DELETE_USER_INFO')
-      commit('DELETE_TOKEN')
-      return e.response
+      dispatch('logout', e.response.data.message)
     }
   },
-  logout({ commit }) {
-    localStorage.clear()
+  logout({ commit, dispatch }, logoutInfo) {
+    logoutInfo = logoutInfo ? " - " + logoutInfo : ""
     commit('DELETE_USER_INFO')
-    commit('DELETE_TOKEN')
+    router.push('/login')
+    dispatch('setSnackbar', { text: "You've benn logged out" + logoutInfo , color: "error" })
   }
 }
 
@@ -117,10 +118,9 @@ export const mutations = {
     localStorage.setItem('token', data)
     state.token = data
   },
-  DELETE_TOKEN(state) {
-    state.token = null
-  },
   DELETE_USER_INFO(state) {
+    localStorage.clear()
+    state.token = null
     state.username = null
     state.role = null
   }
