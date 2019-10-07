@@ -18,6 +18,7 @@ export const getters = {
 export const actions = {
   async login({ commit, dispatch }, payload) {
     try {
+      dispatch('setLoading', true)
       let response = await Api().post(`${baseUrl}/login`, payload)
       commit('SET_TOKEN', response.data.data.token)
       setTimeout(() => { 
@@ -43,7 +44,7 @@ export const actions = {
     logoutInfo = logoutInfo ? " - " + logoutInfo : ""
     commit('DELETE_USER_INFO')
     router.push('/login')
-    dispatch('setSnackbar', { text: "You've benn logged out" + logoutInfo , color: "error" })
+    dispatch('setSnackbar', { text: "You've been logged out" + logoutInfo , color: "error" })
   }
 }
 

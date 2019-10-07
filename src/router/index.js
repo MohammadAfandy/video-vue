@@ -30,6 +30,14 @@ const routes = [
         },
       },
       {
+        path: "video/add",
+        name: "video-add",
+        component: () => import('@/views/video/VideoAdd'),
+        meta: {
+          indexing: true
+        },
+      },
+      {
         path: "video/:id",
         name: "video-detail",
         params: true,
