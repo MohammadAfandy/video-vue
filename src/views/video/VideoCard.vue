@@ -1,6 +1,6 @@
 <template>
   <v-card
-    :to="{ name: 'video-detail' , params: { id: video.id }}"
+    :to="linkDetail ? { name: 'video-detail' , params: { id: video.id }} : ''"
     class="mx-auto"
     width="350"
     height="500"
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  props: ["video"],
+  props: ["video", "linkDetail"],
   filters: {
     abbreviate(text) {
       return text && text.slice(0, 297) + (text.length >= 300 ? "..." : "");

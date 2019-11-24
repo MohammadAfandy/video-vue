@@ -31,6 +31,7 @@
                 v-model="formData.username"
                 prepend-icon="mdi-account"
                 type="text"
+                :error-messages="!!formError.username ? formError.username.join(' | ') : []"
               >
               </v-text-field>
               <v-text-field
@@ -41,6 +42,7 @@
                 prepend-icon="mdi-lock"
                 :type="showPassword ? 'text' : 'password'"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :error-messages="!!formError.password ? formError.password.join(' | ') : []"
                 @click:append="showPassword = !showPassword"
               ></v-text-field>
             </v-card-text>
@@ -60,10 +62,14 @@ export default {
   computed: {
     loading() {
       return this.$store.getters.getLoading
+    },
+    formError() {
+      return this.$store.getters.getFormError
     }
   },
   created() {
     this.isLoggedIn()
+    this.$store.dispatch('setFormError', [])
   },
   data: () => ({
     showPassword: false,
@@ -74,7 +80,6 @@ export default {
   }),
   methods: {
     async login() {
-      this.$store.dispatch('setLoading', true)
       await this.$store.dispatch('login', this.formData)
     },
     isLoggedIn() {

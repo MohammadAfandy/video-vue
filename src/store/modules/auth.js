@@ -5,14 +5,14 @@ const baseUrl = '/auth'
 
 export const state = {
   token: localStorage.getItem('token') || null,
-  username: localStorage.getItem('username') || null,
-  role: localStorage.getItem('role') || null,
+  // username: localStorage.getItem('username') || null,
+  // role: localStorage.getItem('role') || null,
 }
 
 export const getters = {
   getToken: state => state.token,
-  getUsername: state => state.username,
-  getRole: state => state.role
+  // getUsername: state => state.username,
+  // getRole: state => state.role
 }
 
 export const actions = {
@@ -25,24 +25,30 @@ export const actions = {
         dispatch('setSnackbar', { text: "Login Success" })
         dispatch('setLoading', false)
         router.push('/')
-      })
+      }, 1000)
     } catch(e) {
-      commit('DELETE_USER_INFO')
-      dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      if (e.response.status === 422) {
+        dispatch('setFormError', e.response.data.data)
+      } else {
+        dispatch('setFormError', [])
+        dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      }
       dispatch('setLoading', false)
     }
   },
-  async fetchUserInfo({ commit, dispatch }) {
-    try {
-      let response = await Api().get(`${baseUrl}/info`)
-      commit('SET_USER_INFO', response.data.data.info)
-    } catch(e) {
-      dispatch('logout', e.response.data.message)
-    }
-  },
+  // async fetchUserInfo({ commit, dispatch }) {
+  //   try {
+  //     let response = await Api().get(`${baseUrl}/info`)
+  //     commit('SET_USER_INFO', response.data.data.info)
+  //   } catch(e) {
+  //     // dispatch('logout', e.response.data.message)
+  //     dispatch('logout')
+  //   }
+  // },
   logout({ commit, dispatch }, logoutInfo) {
+    localStorage.clear()
     logoutInfo = logoutInfo ? " - " + logoutInfo : ""
-    commit('DELETE_USER_INFO')
+    commit('DELETE_PROFILE')
     router.push('/login')
     dispatch('setSnackbar', { text: "You've been logged out" + logoutInfo , color: "error" })
   }
@@ -109,20 +115,18 @@ export const actions = {
 // }
 
 export const mutations = {
-  SET_USER_INFO(state, data) {
-    localStorage.setItem('username', data.username)
-    localStorage.setItem('role', data.role)
-    state.username = data.username
-    state.role = data.role
-  },
+  // SET_USER_INFO(state, data) {
+  //   state.username = data.username
+  //   state.role = data.role
+  // },
   SET_TOKEN(state, data) {
     localStorage.setItem('token', data)
     state.token = data
   },
-  DELETE_USER_INFO(state) {
-    localStorage.clear()
-    state.token = null
-    state.username = null
-    state.role = null
-  }
+  // DELETE_USER_INFO(state) {
+  //   localStorage.clear()
+  //   state.token = null
+  //   state.username = null
+  //   state.role = null
+  // }
 }

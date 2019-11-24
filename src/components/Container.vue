@@ -1,6 +1,13 @@
 <template>
   <v-card>
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-layout column align-center>
+        <v-flex class="ma-3">
+          <v-avatar size="100">
+            <v-img :src="profile.images ? '/api/' + profile.images : 'https://p7.hiclipart.com/preview/626/838/440/computer-icons-avatar-user-profile-contact.jpg'"></v-img>
+          </v-avatar>
+        </v-flex>
+      </v-layout>
       <v-list v-for="item in navItems" :key="item.url" dense>
         <v-list-item :to="item.url">
           <v-list-item-action>
@@ -13,20 +20,25 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="indigo" dark>
+    <v-app-bar app color="indigo" dark clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>VIDEO APP</v-toolbar-title>
       <div class="flex-grow-1"></div>
       <v-menu offset-y transition="slide-y-transition" bottom>
         <template v-slot:activator="{ on }">
-          <v-btn v-on="on" text>
-            ( {{ currentUser }} )
-          </v-btn>
+          <v-btn v-on="on" text>( {{ profile.name }} )</v-btn>
         </template>
 
         <v-list>
           <v-list-item @click="() => {}">
-            <v-list-item-title><v-btn text @click="logout">Logout</v-btn></v-list-item-title>
+            <v-list-item-title>
+              <v-btn text :to=" { name: 'profile' }">Profile</v-btn>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="() => {}">
+            <v-list-item-title>
+              <v-btn text @click="logout">Logout</v-btn>
+            </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -47,14 +59,17 @@ export default {
   name: "container",
   computed: {
     loading() {
-      return this.$store.getters.getLoading
+      return this.$store.getters.getLoading;
     },
-    currentUser() {
-      return this.$store.getters.getUsername
+    profile() {
+      return {
+        name: this.$store.getters.getName,
+        images: this.$store.getters.getImages
+      }
     }
   },
-  created() {
-    this.checkAuth()
+  mounted() {
+    this.checkAuth();
   },
   data: () => ({
     drawer: true,
@@ -62,21 +77,21 @@ export default {
   }),
   methods: {
     async checkAuth() {
-      await this.$store.dispatch("fetchUserInfo");
+      await this.$store.dispatch("fetchProfile");
       if (this.$store.getters.getToken !== null) {
-        if (this.$store.getters.getRole === "admin") {
+        if (this.$store.getters.getProfile.role === "admin") {
           this.navItems = navAdmin.items;
         } else {
           this.navItems = navUser.items;
         }
       } else {
-        this.$router.push("login");
+        this.logout();
       }
     },
     logout() {
       this.$store.dispatch("setLoading", true);
       setTimeout(() => {
-        this.$store.dispatch('logout')
+        this.$store.dispatch("logout");
         this.$store.dispatch("setLoading", false);
       }, 1000);
     }

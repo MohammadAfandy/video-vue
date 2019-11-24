@@ -5,22 +5,25 @@ const baseUrl = '/video'
 
 export const state = {
   videos: [],
+  videoTotal: 0,
   video: {}
 }
 
 export const getters = {
   getVideos: state => state.videos,
-  getVideoDetail: state => state.video
+  getVideoDetail: state => state.video,
+  getVideoTotal: state => state.videoTotal
 }
 
 export const actions = {
-  async fetchVideos({ commit, dispatch }) {
+  async fetchVideos({ commit, dispatch }, payload) {
     try {
-      let response = await Api().get(baseUrl)
-      commit('GET_VIDEOS', response.data.data)
-    } catch(e) {
+      let response = await Api().get(baseUrl + '?page=' + payload.page + '&limit=' + payload.limit)
+      commit('SET_VIDEOS', response.data.data)
+    } catch (e) {
       if (e.response.status === 401) {
-        dispatch('logout', (e.response.data.message))
+        // dispatch('logout', (e.response.data.message))
+        dispatch('logout')
       } else {
         dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
       }
@@ -28,12 +31,14 @@ export const actions = {
   },
   async fetchVideoDetail({ commit, dispatch }, payload) {
     try {
-      let response = await Api().get(baseUrl + "/" + payload)
-      commit('GET_VIDEO_DETAIL', response.data.data)
-    } catch(e) {
+      let response = await Api().get(`${baseUrl}/${payload}`)
+      commit('SET_VIDEO_DETAIL', response.data.data)
+    } catch (e) {
       if (e.response.status === 401) {
-        dispatch('logout', e.response.data.message)
+        // dispatch('logout', e.response.data.message)
+        dispatch('logout')
       } else {
+        dispatch('setFormError', [])
         dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
       }
     }
@@ -42,12 +47,48 @@ export const actions = {
     try {
       dispatch('setLoading', true)
       await Api().post(baseUrl, payload)
-      setTimeout(() => { 
+      setTimeout(() => {
         dispatch('setSnackbar', { text: "Success Add Video" })
         dispatch('setLoading', false)
         router.push('/video')
       })
-    } catch(e) {
+    } catch (e) {
+      if (e.response.status === 422) {
+        dispatch('setFormError', e.response.data.data)
+      } else {
+        dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      }
+      dispatch('setLoading', false)
+    }
+  },
+  async updateVideo({ dispatch }, payload) {
+    try {
+      dispatch('setLoading', true)
+      await Api().put(`${baseUrl}/${payload.id}`, payload)
+      setTimeout(() => {
+        dispatch('setSnackbar', { text: "Success Update Video" })
+        dispatch('setLoading', false)
+        router.push('/video')
+      })
+    } catch (e) {
+      if (e.response.status === 422) {
+        dispatch('setFormError', e.response.data.data)
+      } else {
+        dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      }
+      dispatch('setLoading', false)
+    }
+  },
+  async deleteVideo({ dispatch }, payload) {
+    try {
+      dispatch('setLoading', true)
+      await Api().delete(`${baseUrl}/${payload.id}`)
+      setTimeout(() => {
+        dispatch('setSnackbar', { text: "Success Delete Video" })
+        dispatch('setLoading', false)
+        dispatch('fetchVideos')
+      })
+    } catch (e) {
       dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
       dispatch('setLoading', false)
     }
@@ -55,13 +96,11 @@ export const actions = {
 }
 
 export const mutations = {
-  GET_VIDEOS(state, data) {
-    state.videos = data
+  SET_VIDEOS(state, data) {
+    state.videos = data.data,
+    state.videoTotal = data.total
   },
-  GET_VIDEO_DETAIL(state, data) {
+  SET_VIDEO_DETAIL(state, data) {
     state.video = data
-  },
-  ADD_VIDEO(state, data) {
-    state.videos = state.videos.concat(data)
   }
 }

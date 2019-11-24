@@ -6,12 +6,14 @@ export const state = {
   //   timeout: 3000,
   //   color: "success"
   // }
-  snackbars: []
+  snackbars: [],
+  formError: []
 }
 
 export const getters = {
   getLoading: state => state.loading,
   getSnackbars: state => state.snackbars,
+  getFormError: state => state.formError,
 }
 
 export const actions = {
@@ -20,6 +22,9 @@ export const actions = {
   },
   setSnackbar({ commit }, snackbar) {
     commit('SET_SNACKBAR', snackbar)
+  },
+  setFormError({ commit }, formError) {
+    commit('SET_FORM_ERROR', formError)
   }
 }
 
@@ -32,5 +37,8 @@ export const mutations = {
     data.color = data.color || "success"
     data.timeout = data.timeout || 3000
     state.snackbars = state.snackbars.concat(data)
+  },
+  SET_FORM_ERROR(state, data) {
+    state.formError = data
   }
 }

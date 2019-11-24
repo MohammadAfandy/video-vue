@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-breadcrumbs :items="breadCrumbsItems"></v-breadcrumbs>
     <v-row class="d-flex justify-center">
       <v-col md="8" cols="12">
         <video-player  class="video-player-box"
@@ -49,7 +50,11 @@ export default {
     }
   },
   data: () => ({
-    
+    breadCrumbsItems: [
+      { text: "Home", to: { name: 'home' }, disabled: false },
+      { text: "Video", to: { name: 'video' }, disabled: false },
+      { text: "Detail", to: { name: 'video-detail' }, disabled: true },
+    ],
   })
 }
 </script>

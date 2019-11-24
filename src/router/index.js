@@ -10,7 +10,7 @@ const routes = [
     name: "container",
     component: () => import('@/components/Container'),
     meta: {
-      indexing: true
+      auth: true
     },
     children: [
       {
@@ -18,7 +18,13 @@ const routes = [
         name: "home",
         component: () => import('@/views/Home'),
         meta: {
-          indexing: true
+        },
+      },
+      {
+        path: "profile",
+        name: "profile",
+        component: () => import('@/views/Profile'),
+        meta: {
         },
       },
       {
@@ -26,7 +32,6 @@ const routes = [
         name: "video",
         component: () => import('@/views/video/Video'),
         meta: {
-          indexing: true
         },
       },
       {
@@ -34,7 +39,13 @@ const routes = [
         name: "video-add",
         component: () => import('@/views/video/VideoAdd'),
         meta: {
-          indexing: true
+        },
+      },
+      {
+        path: "video/edit/:id",
+        name: "video-edit",
+        component: () => import('@/views/video/VideoEdit'),
+        meta: {
         },
       },
       {
@@ -43,7 +54,6 @@ const routes = [
         params: true,
         component: () => import('@/views/video/VideoDetail'),
         meta: {
-          indexing: true
         },
       },
     ]
@@ -51,18 +61,37 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import('@/views/auth/Login')
+    component: () => import('@/views/auth/Login'),
+    meta: {
+      auth: false
+    },
   },
   {
     path: "*",
     name: "404", 
-    component: () => import('@/views/error/404')
+    component: () => import('@/views/error/404'),
+    meta: {
+      auth: false
+    },
   }
 ]
 
 const router = new VueRouter({
+  base: '/',
   mode:'history',
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.auth)) {
+    if (localStorage.getItem('token') === null) {
+      next({ name: "login" })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
