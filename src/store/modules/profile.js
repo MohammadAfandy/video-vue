@@ -22,6 +22,7 @@ export const actions = {
       commit('SET_PROFILE', response.data.data)
     } catch (e) {
       dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      dispatch('logout')
     }
   },
   async saveProfile({ dispatch }, payload) {

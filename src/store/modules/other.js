@@ -1,18 +1,18 @@
 export const state = {
   loading: false,
-  // snackbar: {
-  //   text: "",
-  //   show: false,
-  //   timeout: 3000,
-  //   color: "success"
-  // }
-  snackbars: [],
+  snackbar: {
+    text: "",
+    show: false,
+    timeout: 3000,
+    color: "success"
+  },
+  // snackbars: "",
   formError: []
 }
 
 export const getters = {
   getLoading: state => state.loading,
-  getSnackbars: state => state.snackbars,
+  getSnackbar: state => state.snackbar,
   getFormError: state => state.formError,
 }
 
@@ -34,9 +34,10 @@ export const mutations = {
   },
   SET_SNACKBAR(state, data) {
     data.show = true
+    data.text = data.text || "Unknown Error"
     data.color = data.color || "success"
     data.timeout = data.timeout || 3000
-    state.snackbars = state.snackbars.concat(data)
+    state.snackbar = data
   },
   SET_FORM_ERROR(state, data) {
     state.formError = data

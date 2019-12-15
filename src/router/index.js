@@ -28,7 +28,7 @@ const routes = [
         },
       },
       {
-        path: "video",
+        path: "video/list",
         name: "video",
         component: () => import('@/views/video/Video'),
         meta: {

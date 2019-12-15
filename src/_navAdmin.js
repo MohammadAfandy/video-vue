@@ -7,8 +7,17 @@ export default {
     },
     {
       name: "Video",
-      url: "/video",
-      icon: 'mdi-video'
+      icon: 'mdi-video',
+      sub: [
+        {
+          name: 'List Video',
+          url: '/video/list',
+        },
+        {
+          name: "Add Video",
+          url: '/video/add',
+        },
+      ]
     }
   ]
 }

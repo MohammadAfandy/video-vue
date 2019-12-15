@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-navigation-drawer v-model="drawer" app clipped>
+    <v-navigation-drawer v-model="drawer" :width="250" app clipped>
       <v-layout column align-center>
         <v-flex class="ma-3">
           <v-avatar size="100">
@@ -9,7 +9,7 @@
         </v-flex>
       </v-layout>
       <v-list v-for="item in navItems" :key="item.url" dense>
-        <v-list-item :to="item.url">
+        <v-list-item v-if="!item.sub" :to="item.url">
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -17,6 +17,22 @@
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-group v-else no-action>
+          <template v-slot:activator>
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <v-list-item v-for="subNav in item.sub" :to="subNav.url" :key="subNav.name">
+            <v-list-item-content>
+              <v-list-item-title>{{ subNav.name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
 
@@ -30,15 +46,11 @@
         </template>
 
         <v-list>
-          <v-list-item @click="() => {}">
-            <v-list-item-title>
-              <v-btn text :to=" { name: 'profile' }">Profile</v-btn>
-            </v-list-item-title>
+          <v-list-item :to=" { name: 'profile' }">
+            Profile
           </v-list-item>
-          <v-list-item @click="() => {}">
-            <v-list-item-title>
-              <v-btn text @click="logout">Logout</v-btn>
-            </v-list-item-title>
+          <v-list-item @click="logout">
+            Logout
           </v-list-item>
         </v-list>
       </v-menu>

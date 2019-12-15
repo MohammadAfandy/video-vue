@@ -4,10 +4,6 @@
     <h1 class="display-1 ma-2 d-flex justify-center">VIDEO</h1>
     <div>
       <v-container>
-        <v-btn color="primary" :to="{ name: 'video-add' }">Add New Video</v-btn>
-      </v-container>
-
-      <v-container>
         <v-tabs class="elevation-2">
           <v-tabs-slider></v-tabs-slider>
           <v-tab v-for="tab in tabs" :key="tab" :href="`#tab-${tab}`">{{ tab }}</v-tab>
@@ -46,9 +42,8 @@
                   </template>
                   <template v-slot:item.actions="{ item }">
                     <v-btn
-                      class="mx-1"
+                      class="mx-1 xtra-small"
                       fab
-                      x-small
                       dark
                       color="success"
                       :to="{ name: 'video-detail', params: {id: item.id} }"
@@ -56,16 +51,15 @@
                       <v-icon dark>mdi-eye</v-icon>
                     </v-btn>
                     <v-btn
-                      class="mx-1"
+                      class="mx-1 xtra-small"
                       fab
-                      x-small
                       dark
                       color="indigo"
                       :to="{ name: 'video-edit', params: { id: item.id } }"
                     >
                       <v-icon dark>mdi-pencil</v-icon>
                     </v-btn>
-                    <v-btn class="mx-1" fab x-small dark color="error" @click="deleteVideo(item)">
+                    <v-btn class="mx-1 xtra-small" fab dark color="error" @click="deleteVideo(item)">
                       <v-icon dark>mdi-delete</v-icon>
                     </v-btn>
                   </template>
@@ -123,17 +117,17 @@ export default {
       tabs: ["table", "grid"],
       table: {
         headers: [
-          { text: "No", value: "number", width: "2%" },
-          { text: "Name", value: "name", width: "28%" },
-          { text: "Url", value: "url", width: "15%" },
+          { text: "No", value: "number", width: "5%" },
+          { text: "Name", value: "name", width: "40%" },
+          // { text: "Url", value: "url", width: "15%" },
           {
             text: "Thumbnail",
             value: "thumbnail",
             width: "10%",
             sortable: false
           },
-          { text: "Created", value: "created_at", width: "10%" },
-          { text: "Updated", value: "updated_at", width: "10%" },
+          { text: "Created", value: "created_at", width: "15%" },
+          { text: "Updated", value: "updated_at", width: "15%" },
           { text: "#", value: "actions", width: "25%", sortable: false }
         ],
         loading: true,
@@ -154,7 +148,8 @@ export default {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
       await this.$store.dispatch("fetchVideos", {
         page: page || 1,
-        limit: itemsPerPage || 10
+        limit: itemsPerPage || 10,
+        sort: sortDesc == 'true' ? sortBy + ':desc' : sortBy
       });
       let items = this.$store.getters.getVideos;
       const total = this.$store.getters.getVideoTotal;
@@ -184,5 +179,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.v-btn.xtra-small {
+  width: 26px;
+  height: 26px;
+}
 </style>

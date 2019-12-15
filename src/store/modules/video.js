@@ -18,7 +18,7 @@ export const getters = {
 export const actions = {
   async fetchVideos({ commit, dispatch }, payload) {
     try {
-      let response = await Api().get(baseUrl + '?page=' + payload.page + '&limit=' + payload.limit)
+      let response = await Api().get(baseUrl + '?page=' + payload.page + '&limit=' + payload.limit + '&sort=' + payload.sort)
       commit('SET_VIDEOS', response.data.data)
     } catch (e) {
       if (e.response.status === 401) {
@@ -50,7 +50,7 @@ export const actions = {
       setTimeout(() => {
         dispatch('setSnackbar', { text: "Success Add Video" })
         dispatch('setLoading', false)
-        router.push('/video')
+        router.push({ name: 'video'})
       })
     } catch (e) {
       if (e.response.status === 422) {
@@ -68,7 +68,7 @@ export const actions = {
       setTimeout(() => {
         dispatch('setSnackbar', { text: "Success Update Video" })
         dispatch('setLoading', false)
-        router.push('/video')
+        router.push({ name: 'video'})
       })
     } catch (e) {
       if (e.response.status === 422) {

@@ -46,7 +46,6 @@
               <v-select
                 v-model="profile.role"
                 label="Role"
-                placeholder="Role"
                 outlined
                 item-value="value"
                 item-text="text"
@@ -66,7 +65,6 @@
                 <v-text-field
                   v-model="password_old"
                   label="Old Password"
-                  placeholder="Old Password"
                   outlined
                   :type="showPasswordOld ? 'text' : 'password'"
                   :append-icon="showPasswordOld ? 'mdi-eye' : 'mdi-eye-off'"
@@ -81,7 +79,6 @@
                 <v-text-field
                   v-model="password"
                   label="New Password"
-                  placeholder="New Password"
                   outlined
                   :type="showPassword ? 'text' : 'password'"
                   :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -96,7 +93,6 @@
                 <v-text-field
                   v-model="password_confirmation"
                   label="Password Confirm"
-                  placeholder="Password Confirm"
                   outlined
                   :type="showPasswordConfirm ? 'text' : 'password'"
                   :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
