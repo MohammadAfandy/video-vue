@@ -21,9 +21,9 @@
             dark
             flat
           >
-            <v-toolbar-title>Login</v-toolbar-title>
+            <v-toolbar-title>Register</v-toolbar-title>
           </v-toolbar>
-          <v-form @submit.prevent="login">
+          <v-form @submit.prevent="register">
             <v-card-text>
               <v-text-field
                 label="Username"
@@ -32,6 +32,24 @@
                 prepend-icon="mdi-account"
                 type="text"
                 :error-messages="!!formError.username ? formError.username.join(' | ') : []"
+              >
+              </v-text-field>
+              <v-text-field
+                label="Email"
+                name="email"
+                v-model="formData.email"
+                prepend-icon="mdi-email"
+                type="text"
+                :error-messages="!!formError.email ? formError.email.join(' | ') : []"
+              >
+              </v-text-field>
+              <v-text-field
+                label="Name"
+                name="name"
+                v-model="formData.name"
+                prepend-icon="mdi-account"
+                type="text"
+                :error-messages="!!formError.name ? formError.name.join(' | ') : []"
               >
               </v-text-field>
               <v-text-field
@@ -45,11 +63,22 @@
                 :error-messages="!!formError.password ? formError.password.join(' | ') : []"
                 @click:append="showPassword = !showPassword"
               ></v-text-field>
+              <v-text-field
+                id="passwordConfirmation"
+                label="Repeat Password"
+                name="password_confirmation"
+                v-model="formData.password_confirmation"
+                prepend-icon="mdi-lock"
+                :type="showPasswordConfirm ? 'text' : 'password'"
+                :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                :error-messages="!!formError.password_confirmation ? formError.password_confirmation.join(' | ') : []"
+                @click:append="showPasswordConfirm = !showPasswordConfirm"
+              ></v-text-field>
             </v-card-text>
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn color="warning" :to="{ name: 'register' }">Register</v-btn>
-              <v-btn color="primary" type="submit" :loading="isLoading">Login</v-btn>
+              <v-btn color="warning" :to="{ name: 'login' }">Back</v-btn>
+              <v-btn color="primary" type="submit" :loading="isLoading">Register</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -75,16 +104,20 @@ export default {
   },
   data: () => ({
     showPassword: false,
+    showPasswordConfirm: false,
     formData: {
       username: "",
-      password: ""
+      email: "",
+      name: "",
+      password: "",
+      password_confirmation: ""
     },
     isLoading: false,
   }),
   methods: {
-    async login() {
+    async register() {
       this.isLoading = true
-      await this.$store.dispatch('login', this.formData)
+      await this.$store.dispatch('register', this.formData)
       this.isLoading = false
     },
     isLoggedIn() {

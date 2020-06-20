@@ -7,15 +7,29 @@ export default {
     },
     {
       name: "Video",
-      icon: 'mdi-video',
+      icon: "mdi-video",
       sub: [
         {
-          name: 'List Video',
-          url: '/video/list',
+          name: "List Video",
+          url: "/video/list",
         },
         {
           name: "Add Video",
-          url: '/video/add',
+          url: "/video/add",
+        },
+      ]
+    },
+    {
+      name: "User Management",
+      icon: "mdi-account",
+      sub: [
+        {
+          name: "List User",
+          url: "/user/list",
+        },
+        {
+          name: "Add User",
+          url: "/user/add",
         },
       ]
     }

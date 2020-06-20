@@ -10,8 +10,12 @@ export default {
       icon: 'mdi-video',
       sub: [
         {
-          name: 'List Video',
+          name: 'My Video',
           url: '/video/list',
+        },
+        {
+          name: "Add Video",
+          url: "/video/add",
         },
       ]
     }

@@ -6,7 +6,7 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-card class width="350">
-            <v-img class="white--text align-end" height="300px" :src="'/api/' + profile.images"></v-img>
+            <v-img class="white--text align-end" height="300px" :src="profile.images ? '/api/' + profile.images : 'https://p7.hiclipart.com/preview/626/838/440/computer-icons-avatar-user-profile-contact.jpg'"></v-img>
 
             <v-card-text class="text--primary">
               <v-list>
@@ -41,7 +41,7 @@
             </v-col>
           </v-row>
 
-          <v-row>
+          <v-row v-if="isAdmin">
             <v-col>
               <v-select
                 v-model="profile.role"
@@ -134,7 +134,7 @@
 <script>
 export default {
   mounted() {
-    this.$store.dispatch("fetchProfile");
+    this.fetchData();
   },
   created() {
     this.$store.dispatch("setFormError", []);
@@ -160,6 +160,7 @@ export default {
         { text: "Admin", value: "admin" },
         { text: "User", value: "user" }
       ],
+      isAdmin: false,
       image: null,
       changePassword: false,
       showPassword: false,
@@ -171,6 +172,12 @@ export default {
     };
   },
   methods: {
+    async fetchData() {
+      await this.$store.dispatch("fetchProfile");
+      if (this.$store.getters.getProfile.role === 'admin') {
+        this.isAdmin = true;
+      }
+    },
     enableChangePassword() {
       this.changePassword = !this.changePassword;
       this.password = this.password_old = this.password_confirmation = "";

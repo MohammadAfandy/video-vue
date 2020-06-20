@@ -56,12 +56,49 @@ const routes = [
         meta: {
         },
       },
+      {
+        path: "user/list",
+        name: "user",
+        component: () => import('@/views/user/User'),
+        meta: {
+        },
+      },
+      // {
+      //   path: "user/add",
+      //   name: "user-add",
+      //   component: () => import('@/views/user/UserAdd'),
+      //   meta: {
+      //   },
+      // },
+      // {
+      //   path: "user/edit/:id",
+      //   name: "user-edit",
+      //   component: () => import('@/views/user/UserEdit'),
+      //   meta: {
+      //   },
+      // },
+      // {
+      //   path: "user/:id",
+      //   name: "user-detail",
+      //   params: true,
+      //   component: () => import('@/views/user/UserDetail'),
+      //   meta: {
+      //   },
+      // },
     ]
   },
   {
     path: "/login",
     name: "login",
     component: () => import('@/views/auth/Login'),
+    meta: {
+      auth: false
+    },
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import('@/views/auth/Register'),
     meta: {
       auth: false
     },

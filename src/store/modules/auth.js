@@ -51,6 +51,27 @@ export const actions = {
     commit('DELETE_PROFILE')
     router.push('/login')
     dispatch('setSnackbar', { text: "You've been logged out" + logoutInfo , color: "error" })
+  },
+
+  async register({ commit, dispatch }, payload) {
+    try {
+      dispatch('setLoading', true)
+      let response = await Api().post(`${baseUrl}/register`, payload)
+
+      setTimeout(() => {
+        dispatch('setSnackbar', { text: "Register Success" })
+        dispatch('setLoading', false)
+        router.push('/login')
+      }, 1000)
+    } catch(e) {
+      if (e.response.status === 422) {
+        dispatch('setFormError', e.response.data.data)
+      } else {
+        dispatch('setFormError', [])
+      }
+      dispatch('setSnackbar', { text: e.response.data.message, color: "error" })
+      dispatch('setLoading', false)
+    }
   }
 }
 

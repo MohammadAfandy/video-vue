@@ -64,7 +64,7 @@
       <v-row>
         <v-col>
           <v-btn color="error" class="mr-3" @click="goBack">Back</v-btn>
-          <v-btn color="success" type="submit" :disabled="btnSubmit.disable">Save</v-btn>
+          <v-btn color="success" type="submit" :loading="btnSubmit.isLoading">{{ btnSubmit.text }}</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -75,7 +75,7 @@
 import VideoCard from "@/views/video/VideoCard";
 
 export default {
-  props: ["video", "formActions"],
+  props: ["video", "formActions", "btnSubmit"],
   created() {
     this.$store.dispatch('setFormError', [])
   },
@@ -88,9 +88,7 @@ export default {
     VideoCard
   },
   data: () => ({
-    btnSubmit: {
-      disable: false
-    }
+    
   }),
   methods: {
     goBack() {

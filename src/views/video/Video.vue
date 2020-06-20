@@ -126,8 +126,8 @@ export default {
             width: "10%",
             sortable: false
           },
+          { text: "Username", value: "username", width: "15%" },
           { text: "Created", value: "created_at", width: "15%" },
-          { text: "Updated", value: "updated_at", width: "15%" },
           { text: "#", value: "actions", width: "25%", sortable: false }
         ],
         loading: true,
