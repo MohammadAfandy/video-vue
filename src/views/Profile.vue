@@ -6,7 +6,7 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-card class width="350">
-            <v-img class="white--text align-end" height="300px" :src="profile.images ? '/api/' + profile.images : 'https://p7.hiclipart.com/preview/626/838/440/computer-icons-avatar-user-profile-contact.jpg'"></v-img>
+            <v-img class="white--text align-end" height="300px" :src="profile.images ? process.env.VUE_APP_BACKEND_URL + '/' + profile.images : 'https://p7.hiclipart.com/preview/626/838/440/computer-icons-avatar-user-profile-contact.jpg'"></v-img>
 
             <v-card-text class="text--primary">
               <v-list>
